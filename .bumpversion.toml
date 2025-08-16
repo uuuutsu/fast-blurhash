@@ -1,0 +1,18 @@
+[tool.bumpversion]
+commit = false
+current_version = "0.2.0"
+message = "Bump version of fast-blurhash: {current_version} → {new_version}"
+parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)(\\.(?P<dev>dev\\d+)\\+(?P<branch>.*))?"
+serialize = ["{major}.{minor}.{patch}.{dev}+{branch}", "{major}.{minor}.{patch}"]
+tag = false
+tag_name = "fast-blurhash-v{new_version}"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+replace = "version = \"{new_version}\""
+search = "version = \"{current_version}\""
+
+[[tool.bumpversion.files]]
+filename = "Cargo.toml"
+replace = "version = \"{new_version}\"\n"
+search = "version = \"{current_version}\"\n"

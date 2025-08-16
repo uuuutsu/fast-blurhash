@@ -1,5 +1,6 @@
 [project]
 name = "fast-blurhash"
+version = "0.2.0"
 description = "Minimal, fast BlurHash encoder/decoder for Python. A wrapper around the Rust fast-blurhash crate, with fully typed API and support for CPython 3.10–3.13."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -21,7 +22,6 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
 ]
 requires-python = ">=3.10,<=3.13"
-dynamic = ["version"]
 dependencies = []
 
 [dependency-groups]
@@ -35,6 +35,7 @@ dev = [
     "pytest>=8.3.5",
     "nox>=2025.5.1",
     "pytest-xdist>=3.8.0",
+    "bumpversion>=0.6.0",
 ]
 pillow = [
     "pillow>=11.3.0",
