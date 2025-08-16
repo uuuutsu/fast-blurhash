@@ -7,19 +7,23 @@ from __future__ import annotations
 
 from enum import Enum, auto
 from types import ModuleType
-from typing import Final, cast, overload
+from typing import TYPE_CHECKING, Final, cast, overload
 
 from fast_blurhash import _fast_blurhash  # type: ignore[attr-defined]
 
-try:
+if TYPE_CHECKING:
     from PIL import Image
     from PIL.ImageFile import ImageFile
+else:
+    try:
+        from PIL import Image
+        from PIL.ImageFile import ImageFile
 
-    pillow_defined = True
-except ImportError:
-    ImageFile = None  # type: ignore[assignment,misc]
-    Image = ModuleType("Image")
-    pillow_defined = False
+        pillow_defined = True
+    except ImportError:
+        ImageFile = None  # type: ignore[assignment,misc]
+        Image = ModuleType("Image")
+        pillow_defined = False
 
 
 RGB_CHANNELS: Final[int] = 3
