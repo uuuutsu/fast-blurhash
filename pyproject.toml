@@ -9,6 +9,9 @@ dynamic = ["version"]
 dependencies = []
 
 [dependency-groups]
+blurhash = [
+    "blurhash-python>=1.2.2",
+]
 dev = [
     "fast-blurhash",
     "mypy>=1.14.1",
@@ -18,7 +21,6 @@ dev = [
     "pytest-xdist>=3.8.0",
 ]
 pillow = [
-    "blurhash-python>=1.2.2",
     "pillow>=11.3.0",
 ]
 

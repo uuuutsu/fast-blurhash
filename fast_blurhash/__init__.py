@@ -73,7 +73,25 @@ def encode(  # type: ignore[no-any-unimported]
     *,
     mode: PixelMode = PixelMode.RGB,
 ) -> str:
-    """Encode a binary image to a blurhash string."""
+    """Encode an image to a BlurHash string.
+
+    Args:
+        image: Raw pixel bytes (RGB/RGBA) or a ``PIL.Image``.
+        x_components: Number of X components in the hash (1-9).
+        y_components: Number of Y components in the hash (1-9).
+        width: Image width in pixels (required when ``image`` is bytes).
+        height: Image height in pixels (required when ``image`` is bytes).
+        mode: Pixel layout of ``image`` when bytes; ignored for ``PIL.Image``.
+
+    Returns:
+        BlurHash string.
+
+    Raises:
+        TypeError: If ``image`` type is unsupported.
+        ValueError: If required ``width``/``height`` are missing for bytes, or
+            if arguments are invalid.
+        OverflowError: If numeric arguments are out of bounds.
+    """
     if pillow_defined and isinstance(image, ImageFile):
         pixels = image.convert(PixelMode.RGB).tobytes()
         return cast(
@@ -129,14 +147,33 @@ def decode(  # type: ignore[no-any-unimported]
     as_: DecodeType = DecodeType.BYTES,
     mode: PixelMode = PixelMode.RGB,
 ) -> bytes | ImageFile:
-    """Decode a blurhash string to a binary image."""
+    """Decode a BlurHash string to image bytes or a ``PIL.Image``.
+
+    Args:
+        blurhash: BlurHash string to decode.
+        width: Output image width in pixels.
+        height: Output image height in pixels.
+        punch: Contrast factor (> 1.0 increases contrast).
+        as_: Output type selector: ``DecodeType.BYTES`` or ``DecodeType.PIL``.
+        mode: Output pixel mode when ``as_`` is ``DecodeType.PIL``.
+
+    Returns:
+        If ``as_`` is ``DecodeType.BYTES``, returns raw RGB bytes of length
+        ``width * height * 3``. If ``DecodeType.PIL``, returns a ``PIL.Image``.
+
+    Raises:
+        RuntimeError: If ``DecodeType.PIL`` is requested but Pillow is missing.
+        ValueError: If arguments are invalid (e.g., ``punch`` <= 1).
+        TypeError: If argument types are incorrect.
+        OverflowError: If numeric arguments are out of bounds.
+    """
     res = _fast_blurhash.decode(blurhash, width, height, punch)
     if as_ == DecodeType.BYTES:
         return cast("bytes", res)
 
     if as_ == DecodeType.PIL:
         if not pillow_defined:
-            raise ImportError("PIL is not installed")
+            raise RuntimeError("PIL is not installed")
 
         return cast("ImageFile", Image.frombytes(PixelMode.RGB, data=res, size=(width, height)).convert(mode))  # type: ignore[no-any-unimported]
 

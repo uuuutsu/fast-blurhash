@@ -20,7 +20,6 @@ def tests(session: nox.Session, group: str) -> None:
         "sync",
         group,
         "--frozen",
-        "--no-default-groups",
         "--active",
         f"--python={session.python}",
     )
@@ -36,7 +35,6 @@ def lint(session: nox.Session, group: str) -> None:
         "sync",
         group,
         "--frozen",
-        "--no-default-groups",
         "--active",
         f"--python={session.python}",
     )

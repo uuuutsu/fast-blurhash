@@ -11,5 +11,5 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
 
         if has_pillow and no_pillow_marker:
             item.add_marker(pytest.mark.skip(reason="Runs only without Pillow"))
-        elif not no_pillow_marker:
+        elif not has_pillow:
             item.add_marker(pytest.mark.skip(reason="Pillow not available"))

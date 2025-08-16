@@ -53,13 +53,13 @@ def test_decode(
 @parametrize(image_path=iterate_images())
 def test_decode_incorrect_type_decode_type(image_path: Path) -> None:
     blurhash = fast_blurhash_encode(Image.open(image_path), DEFAULT_X_COMPONENTS, DEFAULT_Y_COMPONENTS)
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError, match="Invalid decode type."):
         fast_blurhash_decode(blurhash, 3, 4, as_="123")  # type: ignore[call-overload]
 
 
 @pytest.mark.no_pillow
 def test_decode_no_pillow() -> None:
-    with pytest.raises(ImportError):
+    with pytest.raises(RuntimeError):
         fast_blurhash_decode("LEHV6nWB2yk8pyo0adR*.7kCMdnj", 3, 4, as_=DecodeType.PIL)
 
 
