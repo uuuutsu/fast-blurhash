@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from re import escape as esc
+from types import ModuleType
 from typing import TYPE_CHECKING
 
 import pytest
-from PIL import Image
 
 from fast_blurhash import DecodeType, PixelMode
 from fast_blurhash import decode as fast_blurhash_decode
@@ -12,6 +12,11 @@ from fast_blurhash import encode as fast_blurhash_encode
 from tests.assets import iterate_images
 
 from .utils import DEFAULT_X_COMPONENTS, DEFAULT_Y_COMPONENTS, parametrize
+
+try:
+    from PIL import Image
+except ImportError:
+    Image = ModuleType("Image")
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -34,15 +39,28 @@ def test_decode(
     with Image.open(image_path) as img:
         blurhash = fast_blurhash_encode(img, DEFAULT_X_COMPONENTS, DEFAULT_Y_COMPONENTS)
 
-    _img = fast_blurhash_decode(blurhash, *height_width, punch, as_=decode_type, mode=mode)
+    _img = fast_blurhash_decode(blurhash, *height_width, punch, as_=decode_type, mode=mode)  # type: ignore[call-overload]
 
     if decode_type == DecodeType.BYTES:
-        assert isinstance(_img, bytes)  # type: ignore[unreachable]
-        assert len(_img) == height_width[0] * height_width[1] * 3  # type: ignore[unreachable]
+        assert isinstance(_img, bytes)
+        assert len(_img) == height_width[0] * height_width[1] * 3
     else:
         assert isinstance(_img, Image.Image)
         assert _img.size == height_width
         assert _img.mode == mode
+
+
+@parametrize(image_path=iterate_images())
+def test_decode_incorrect_type_decode_type(image_path: Path) -> None:
+    blurhash = fast_blurhash_encode(Image.open(image_path), DEFAULT_X_COMPONENTS, DEFAULT_Y_COMPONENTS)
+    with pytest.raises(TypeError):
+        fast_blurhash_decode(blurhash, 3, 4, as_="123")  # type: ignore[call-overload]
+
+
+@pytest.mark.no_pillow
+def test_decode_no_pillow() -> None:
+    with pytest.raises(ImportError):
+        fast_blurhash_decode("LEHV6nWB2yk8pyo0adR*.7kCMdnj", 3, 4, as_=DecodeType.PIL)
 
 
 @parametrize(image_path=iterate_images(), components=[("3", 4), (3, "4"), ("3", "4"), (3.0, 4), (3, 4.0), (3.0, 4.0)])

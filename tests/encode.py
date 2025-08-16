@@ -1,17 +1,26 @@
 from __future__ import annotations
 
 from re import escape as esc
+from types import ModuleType
 from typing import TYPE_CHECKING
 
 import pytest
-from PIL import Image
-from blurhash import encode as blurhash_encode
 
 from fast_blurhash import PixelMode
 from fast_blurhash import encode as fast_blurhash_encode
 from tests.assets import iterate_images
 
 from .utils import DEFAULT_X_COMPONENTS, DEFAULT_Y_COMPONENTS, parametrize
+
+try:
+    from PIL import Image
+    from blurhash import encode as blurhash_encode
+except ImportError:
+    Image = ModuleType("Image")
+
+    def blurhash_encode(*_args: object, **_kwargs: object) -> None:
+        raise ImportError("Pillow is not installed")
+
 
 if TYPE_CHECKING:
     from pathlib import Path

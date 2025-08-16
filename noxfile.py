@@ -12,12 +12,13 @@ nox.options.reuse_existing_virtualenvs = True
 
 
 @nox.session(tags=["tests"], python=PYTHON_VERSIONS)
-def tests(session: nox.Session) -> None:
+@nox.parametrize("group", ["--group=dev", "--all-groups"])
+def tests(session: nox.Session, group: str) -> None:
     """Run the tests."""
     session.run_install(
         "uv",
         "sync",
-        "--group=dev",
+        group,
         "--frozen",
         "--no-default-groups",
         "--active",
@@ -26,13 +27,14 @@ def tests(session: nox.Session) -> None:
     session.run("pytest", "tests", f"-n={XDIST_WORKERS}")
 
 
-@nox.session(tags=["tests"], python=PYTHON_VERSIONS)
-def lint(session: nox.Session) -> None:
-    """Run the tests."""
+@nox.session(tags=["lint"], python=PYTHON_VERSIONS)
+@nox.parametrize("group", ["--group=dev", "--all-groups"])
+def lint(session: nox.Session, group: str) -> None:
+    """Run the linter."""
     session.run_install(
         "uv",
         "sync",
-        "--group=dev",
+        group,
         "--frozen",
         "--no-default-groups",
         "--active",
@@ -42,15 +44,15 @@ def lint(session: nox.Session) -> None:
     session.run("ruff", "format", "--check", "tests", "fast_blurhash")
 
 
-@nox.session(tags=["tests"], python=PYTHON_VERSIONS)
-def mypy(session: nox.Session) -> None:
-    """Run the tests."""
+@nox.session(tags=["mypy"], python=PYTHON_VERSIONS)
+@nox.parametrize("group", ["--group=dev", "--all-groups"])
+def mypy(session: nox.Session, group: str) -> None:
+    """Run the type checker."""
     session.run_install(
         "uv",
         "sync",
-        "--group=dev",
+        group,
         "--frozen",
-        "--no-default-groups",
         "--active",
         f"--python={session.python}",
     )

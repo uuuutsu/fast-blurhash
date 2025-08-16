@@ -4,20 +4,22 @@ requires-python = ">=3.10,<=3.13"
 classifiers = [
     "Programming Language :: Rust",
     "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dynamic = ["version"]
+dependencies = []
 
 [dependency-groups]
 dev = [
     "fast-blurhash",
     "mypy>=1.14.1",
-    "pillow>=10.4.0",
     "ruff>=0.12.8",
     "pytest>=8.3.5",
     "nox>=2025.5.1",
-    "blurhash-python>=1.2.2",
     "pytest-xdist>=3.8.0",
+]
+pillow = [
+    "blurhash-python>=1.2.2",
+    "pillow>=11.3.0",
 ]
 
 [build-system]
@@ -43,7 +45,7 @@ disallow_any_unimported = true
 disallow_any_decorated = true
 disallow_any_generics = true
 warn_return_any = true
-warn_unused_ignores = true
+warn_unused_ignores = false
 warn_unused_configs = true
 warn_unreachable = true
 pretty = true
@@ -95,6 +97,9 @@ convention = "google"
 python_files = "tests/*.py"
 console_output_style = "progress"
 addopts = "-vs -rf"
+markers = [
+    "no_pillow: mark a test to run only when Pillow is NOT installed"
+]
 
 [tool.maturin]
 features = ["pyo3/extension-module"]

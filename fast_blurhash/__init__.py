@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from enum import Enum, auto
 from types import ModuleType
-from typing import TYPE_CHECKING, Final, cast, overload
+from typing import TYPE_CHECKING, Final, Literal, cast, overload
 
 from fast_blurhash import _fast_blurhash  # type: ignore[attr-defined]
 
@@ -25,7 +25,6 @@ else:
     except ImportError:
         ImageFile = None  # type: ignore[assignment,misc]
         Image = ModuleType("Image")
-
 
 RGB_CHANNELS: Final[int] = 3
 RGBA_CHANNELS: Final[int] = 4
@@ -58,14 +57,14 @@ def encode(
 
 
 @overload
-def encode(
+def encode(  # type: ignore[no-any-unimported]
     image: ImageFile,
     x_components: int,
     y_components: int,
 ) -> str: ...
 
 
-def encode(
+def encode(  # type: ignore[no-any-unimported]
     image: bytes | ImageFile,
     x_components: int,
     y_components: int,
@@ -105,23 +104,23 @@ def decode(
     height: int,
     punch: float = 1.0,
     *,
-    as_: DecodeType = DecodeType.BYTES,
+    as_: Literal[DecodeType.BYTES] = DecodeType.BYTES,
 ) -> bytes: ...
 
 
 @overload
-def decode(
+def decode(  # type: ignore[no-any-unimported]
     blurhash: str,
     width: int,
     height: int,
     punch: float = 1.0,
     *,
-    as_: DecodeType = DecodeType.PIL,
+    as_: Literal[DecodeType.PIL] = DecodeType.PIL,
     mode: PixelMode = PixelMode.RGB,
 ) -> ImageFile: ...
 
 
-def decode(
+def decode(  # type: ignore[no-any-unimported]
     blurhash: str,
     width: int,
     height: int,
@@ -139,7 +138,7 @@ def decode(
         if not pillow_defined:
             raise ImportError("PIL is not installed")
 
-        return cast("ImageFile", Image.frombytes(PixelMode.RGB, data=res, size=(width, height)).convert(mode))
+        return cast("ImageFile", Image.frombytes(PixelMode.RGB, data=res, size=(width, height)).convert(mode))  # type: ignore[no-any-unimported]
 
     raise ValueError("Invalid decode type.")
 
