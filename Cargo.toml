@@ -2,6 +2,13 @@
 name = "fast-blurhash"
 version = "0.1.0"
 edition = "2021"
+description = "Fast blurhash for Python"
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/uuuutsu/fast-blurhash"
+homepage = "https://github.com/uuuutsu/fast-blurhash"
+documentation = "https://github.com/uuuutsu/fast-blurhash#readme"
+keywords = ["blurhash", "image", "pyo3", "python", "ffi"]
 
 [lib]
 name = "fast_blurhash"
@@ -9,4 +16,10 @@ crate-type = ["cdylib"]
 
 [dependencies]
 fast-blurhash = "1.0.1"
-pyo3 = "0.25.0"
+pyo3 = { version = "0.25.0", features = ["extension-module", "abi3-py310"] }
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = "symbols"

@@ -6,10 +6,21 @@ This module is a thin wrapper around the `blurhash` crate.
 from __future__ import annotations
 
 from enum import Enum, auto
+from importlib import metadata as _importlib_metadata
 from types import ModuleType
 from typing import TYPE_CHECKING, Final, Literal, cast, overload
 
 from fast_blurhash import _fast_blurhash  # type: ignore[attr-defined]
+
+__title__ = "fast-blurhash"
+__summary__ = "Minimal, fast BlurHash encoder/decoder for Python. "
+__uri__ = "https://github.com/uuuutsu/fast-blurhash"
+__author__ = "アンドロ"
+__license__ = "MIT"
+try:
+    __version__ = _importlib_metadata.version("fast-blurhash")
+except _importlib_metadata.PackageNotFoundError:
+    __version__ = "0.1.0"
 
 pillow_defined = False
 

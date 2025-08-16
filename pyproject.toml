@@ -1,10 +1,26 @@
 [project]
 name = "fast-blurhash"
-requires-python = ">=3.10,<=3.13"
+description = "Minimal, fast BlurHash encoder/decoder for Python. A wrapper around the Rust fast-blurhash crate, with fully typed API and support for CPython 3.10–3.13."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "アンドロ" }]
+keywords = ["blurhash", "image", "rust", "pyo3", "ffi", "bindings"]
 classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Rust",
+    "Topic :: Multimedia :: Graphics",
+    "Typing :: Typed",
     "Programming Language :: Python :: Implementation :: CPython",
 ]
+requires-python = ">=3.10,<=3.13"
 dynamic = ["version"]
 dependencies = []
 
@@ -104,8 +120,13 @@ markers = [
 ]
 
 [tool.maturin]
-features = ["pyo3/extension-module"]
+bindings = "pyo3"
+features = ["pyo3/extension-module", "pyo3/abi3-py310"]
 module-name = "fast_blurhash._fast_blurhash"
+strip = true
+python-packages = ["fast_blurhash"]
+include = ["fast_blurhash/py.typed"]
+sdist-include = ["README.md", "LICENSE", "fast_blurhash/py.typed"]
 
 [tool.uv.sources]
 fast-blurhash = { workspace = true }
