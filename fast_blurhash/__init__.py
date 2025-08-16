@@ -11,6 +11,8 @@ from typing import TYPE_CHECKING, Final, cast, overload
 
 from fast_blurhash import _fast_blurhash  # type: ignore[attr-defined]
 
+pillow_defined = False
+
 if TYPE_CHECKING:
     from PIL import Image
     from PIL.ImageFile import ImageFile
@@ -23,7 +25,6 @@ else:
     except ImportError:
         ImageFile = None  # type: ignore[assignment,misc]
         Image = ModuleType("Image")
-        pillow_defined = False
 
 
 RGB_CHANNELS: Final[int] = 3
