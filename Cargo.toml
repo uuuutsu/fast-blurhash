@@ -1,6 +1,6 @@
 [package]
 name = "fast-blurhash"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
 description = "Fast blurhash for Python"
 license = "MIT"
